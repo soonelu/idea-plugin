@@ -1,0 +1,67 @@
+<idea-plugin>
+    <id>ltd.kafka.soonelu.AllGen</id>
+    <name>AllGen</name>
+    <vendor email="soonelu@126.com" url="http://www.kfka.ltd">soonelu</vendor>
+
+    <description><![CDATA[
+    Controller Service Impl代码生成,可根据模板配置,生成文件可选
+    ]]></description>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+    <!--必须为企业版-->
+    <depends>com.intellij.modules.lang</depends>
+    <!--必须依赖Database Tool插件-->
+    <depends>com.intellij.database</depends>
+    <!--必须依赖Velocity插件-->
+    <depends>com.intellij.velocity</depends>
+
+    <!--扩展点-->
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+        <!--实例化配置信息服务-->
+        <applicationService
+                serviceImplementation="ltd.kafka.soonelu.plugins.config.GenSettings"/>
+        <!--项目服务-->
+        <projectService
+                serviceInterface="ltd.kafka.soonelu.plugins.service.gen.TableInfoService"
+                serviceImplementation="ltd.kafka.soonelu.plugins.service.gen.impl.TableInfoServiceImpl"/>
+        <projectService
+                serviceInterface="ltd.kafka.soonelu.plugins.service.gen.CodeGenerateService"
+                serviceImplementation="ltd.kafka.soonelu.plugins.service.gen.impl.CodeGenerateServiceImpl"/>
+
+        <!--系统设置面板-->
+        <applicationConfigurable dynamic="true" instance="ltd.kafka.soonelu.plugins.ui.gen.MainSetting"/>
+
+        <velocity.globalVariableProvider implementation="ltd.kafka.soonelu.plugins.provider.GenGlobalVariableProvider"/>
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+        <group id="ltd.kafka.soonelu.plugins.actions"
+               class="ltd.kafka.soonelu.plugins.actions.gen.MainActionGroup"
+               text="All Gen"
+               popup="true">
+            <!--生成代码菜单-->
+            <add-to-group group-id="DatabaseViewPopupMenu" anchor="first"/>
+        </group>
+        <action id="ltd.kafka.soonelu.plugins.actions.gen.C2SwgAction" class="ltd.kafka.soonelu.plugins.actions.gen.C2SwgAction"
+                text="C2SAction" description="change the swagger">
+            <add-to-group group-id="NewGroup1" anchor="first"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="alt PERIOD" second-keystroke="alt PERIOD"/>
+        </action>
+        <action id="ltd.kafka.soonelu.plugins.actions.gson.Gsonformat" class="ltd.kafka.soonelu.plugins.actions.gson.MainAction" text="GsonFormat">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="alt x"/>
+        </action>
+        <action id="ltd.kafka.soonelu.plugins.actions.ut.times"
+                class="ltd.kafka.soonelu.plugins.actions.ut.UtilAction"
+                text="UtimeAction" description="工具集">
+            <add-to-group group-id="GenerateGroup" anchor="first"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="alt M"/>
+        </action>
+    </actions>
+</idea-plugin>
